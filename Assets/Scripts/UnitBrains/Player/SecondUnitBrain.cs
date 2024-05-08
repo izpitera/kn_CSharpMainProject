@@ -17,14 +17,14 @@ namespace UnitBrains.Player
         {
             float overheatTemperature = OverheatTemperature;
             int currentTemperature = GetTemperature();
-            Debug.Log(currentTemperature);
+            //Debug.Log(currentTemperature);
             ///////////////////////////////////////
             // Homework 1.3 (1st block, 3rd module)
             ///////////////////////////////////////
 
             if (currentTemperature >= overheatTemperature)
             {
-                Debug.Log("Overheated");
+                //Debug.Log("Overheated");
                 return;
             }
 
@@ -48,10 +48,32 @@ namespace UnitBrains.Player
             // Homework 1.4 (1st block, 4rd module)
             ///////////////////////////////////////
             List<Vector2Int> result = GetReachableTargets();
-            while (result.Count > 1)
-            {
-                result.RemoveAt(result.Count - 1);
+            float minDistance = float.MaxValue;
+            Vector2Int closestTarget;
+            if (result.Count == 0) { 
+                return result;
             }
+            else
+            {
+                closestTarget = result[0];
+            }
+
+            foreach (var target in result)
+            {
+                if (DistanceToOwnBase(target) < minDistance)
+                {
+                    closestTarget = target;
+                    minDistance = DistanceToOwnBase(target);                  
+                }
+                
+            }
+            Debug.Log("Coordinates: " + closestTarget.x + " " + closestTarget.y + ", Distance: " + minDistance);
+            //while (result.Count > 1)
+            //{
+            //    result.RemoveAt(result.Count - 1);
+            //}
+            result.Clear();
+            result.Add(closestTarget);
             return result;
             ///////////////////////////////////////
         }
