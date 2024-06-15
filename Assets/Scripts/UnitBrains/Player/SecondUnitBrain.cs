@@ -46,13 +46,13 @@ namespace UnitBrains.Player
         public override Vector2Int GetNextStep()
         {
             //return base.GetNextStep();
-            if (targetOutOfRange.Count > 0 && !IsTargetInRange(targetOutOfRange[0]))
+            if (targetOutOfRange.Count <= 0 || IsTargetInRange(targetOutOfRange[0]))
             {
-                return unit.Pos.CalcNextStepTowards(targetOutOfRange[0]);
+                return unit.Pos;
             }
             else
             {
-                return unit.Pos;
+                return unit.Pos.CalcNextStepTowards(targetOutOfRange[0]);
             }
         }
 
@@ -64,12 +64,14 @@ namespace UnitBrains.Player
             
             IEnumerable<Vector2Int> allTargets = GetAllTargets();
             //Debug.Log($"Targets: {allTargets.Count()}");
-            //Vector2Int targetBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
+            Vector2Int targetBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
             //List<Vector2Int> result = GetReachableTargets();
             List<Vector2Int> result = new List<Vector2Int>();
 
             float minDistance = float.MaxValue;
             Vector2Int closestTarget = Vector2Int.zero;
+            result.Add(targetBase);
+            targetOutOfRange.Add(targetBase);
 
             foreach (var target in allTargets)
             {
@@ -84,6 +86,8 @@ namespace UnitBrains.Player
             if (minDistance < float.MaxValue)
             {
                 result.Clear();
+                targetOutOfRange.Clear();
+
                 if (IsTargetInRange(closestTarget))
                 {
                     result.Add(closestTarget);
