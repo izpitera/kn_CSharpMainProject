@@ -23,17 +23,14 @@ namespace UnitBrains.Player
         {
             float overheatTemperature = OverheatTemperature;
             int currentTemperature = GetTemperature();
-            //Debug.Log(currentTemperature);
             ///////////////////////////////////////
             // Homework 1.3 (1st block, 3rd module)
-            ///////////////////////////////////////
-
+            ///////////////////////////////////////           
             if (currentTemperature >= overheatTemperature)
             {
                 //Debug.Log("Overheated");
                 return;
             }
-
             for (int i = 0; i <= currentTemperature; i++)
             {
                 var projectile = CreateProjectile(forTarget);
@@ -61,28 +58,24 @@ namespace UnitBrains.Player
             ///////////////////////////////////////
             // Homework 1.6 (1st block, 6th module)
             ///////////////////////////////////////
-            
+            List<Vector2Int> result = new();
             IEnumerable<Vector2Int> allTargets = GetAllTargets();
-            //Debug.Log($"Targets: {allTargets.Count()}");
             Vector2Int targetBase = runtimeModel.RoMap.Bases[IsPlayerUnitBrain ? RuntimeModel.BotPlayerId : RuntimeModel.PlayerId];
-            //List<Vector2Int> result = GetReachableTargets();
-            List<Vector2Int> result = new List<Vector2Int>();
 
             float minDistance = float.MaxValue;
             Vector2Int closestTarget = Vector2Int.zero;
             result.Add(targetBase);
-            targetOutOfRange.Add(targetBase);
+            //targetOutOfRange.Add(targetBase);
 
             foreach (var target in allTargets)
             {
                 if (DistanceToOwnBase(target) < minDistance)
                 {
                     closestTarget = target;
-                    minDistance = DistanceToOwnBase(target);                  
+                    minDistance = DistanceToOwnBase(target);
                 }
-                
             }
-            
+
             if (minDistance < float.MaxValue)
             {
                 result.Clear();
@@ -98,9 +91,7 @@ namespace UnitBrains.Player
                     targetOutOfRange.Add(closestTarget);
                     //if (targetOutOfRange.Count() > 0) Debug.Log($"OUT OF RANGE IS NOT EMPTY");
                 }
-
-            }
-                
+            }   
             return result;
             ///////////////////////////////////////
         }
